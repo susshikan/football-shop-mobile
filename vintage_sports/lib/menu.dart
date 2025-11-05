@@ -28,7 +28,7 @@ class MyHomePage extends StatelessWidget {
       ),
       drawer: LeftDrawer(),
       // Body halaman dengan padding di sekelilingnya.
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         // Menyusun widget secara vertikal dalam sebuah kolom.
         child: Column(
