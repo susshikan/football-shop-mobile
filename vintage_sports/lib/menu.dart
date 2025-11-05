@@ -74,7 +74,7 @@ class MyHomePage extends StatelessWidget {
                     crossAxisCount: 3,
                     // Agar grid menyesuaikan tinggi kontennya.
                     shrinkWrap: true,
-
+                    physics: NeverScrollableScrollPhysics(),
                     // Menampilkan ItemCard untuk setiap item dalam list items.
                     children: items.map((ItemHomepage item) {
                       return ItemCard(item);

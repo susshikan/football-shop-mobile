@@ -52,7 +52,7 @@ class LeftDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.post_add),
-            title: const Text('Add News'),
+            title: const Text('Create Products'),
             // Bagian redirection ke NewsFormPage
             onTap: () {
               Navigator.pushReplacement(
