@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:vintage_sports/models/product_entry.dart';
 
@@ -7,18 +6,11 @@ class ProductDetailPage extends StatelessWidget {
 
   const ProductDetailPage({super.key, required this.product});
 
-  String _formatDate(DateTime date) {
-    // Simple date formatter without intl package
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return '${date.day} ${months[date.month - 1]} ${date.year}, ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('News Detail'),
+        title: const Text('Product Detail'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
@@ -26,22 +18,20 @@ class ProductDetailPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Thumbnail image
-            if (product.thumbnail.isNotEmpty)
+            // Thumbnail
+            if (product.thumbnail!.isNotEmpty)
               Image.network(
-                'http://localhost:8000/proxy-image/?url=${Uri.encodeComponent(product.thumbnail)}',
+                'http://localhost:8000/proxy-image/?url=${Uri.encodeComponent(product.thumbnail!)}',
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 250,
                   color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(Icons.broken_image, size: 50),
-                  ),
+                  child: const Center(child: Icon(Icons.broken_image, size: 50)),
                 ),
               ),
-            
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -51,14 +41,16 @@ class ProductDetailPage extends StatelessWidget {
                   if (product.isFeatured)
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 6.0),
+                        horizontal: 12.0,
+                        vertical: 6.0,
+                      ),
                       margin: const EdgeInsets.only(bottom: 12.0),
                       decoration: BoxDecoration(
                         color: Colors.amber,
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       child: const Text(
-                        'Featured',
+                        'FEATURED',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
@@ -66,7 +58,7 @@ class ProductDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                  // Title
+                  // Name
                   Text(
                     product.name,
                     style: const TextStyle(
@@ -76,12 +68,14 @@ class ProductDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
 
-                  // Category and Date
+                  // Category + Price
                   Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 4.0),
+                          horizontal: 10.0,
+                          vertical: 4.0,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.indigo.shade100,
                           borderRadius: BorderRadius.circular(12.0),
@@ -96,25 +90,48 @@ class ProductDetailPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-              
                     ],
                   ),
-                  const SizedBox(height: 8),
 
-                  // Views count
-                  
-                  
+                  const SizedBox(height: 16),
+
+                  // PRICE
+                  Text(
+                    "Price: Rp ${product.price}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // SEASON
+                  Text(
+                    "Season: ${product.season}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // EXCLUSIVE
+
+                  // HISTORY VALUE
+                  Text(
+                    "History Value: ${product.historyValue}",
+                    style: const TextStyle(fontSize: 16),
+                  ),
+
                   const Divider(height: 32),
 
-                  // Full content
+                  // Description
                   Text(
                     product.description,
                     style: const TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 16,
                       height: 1.6,
                     ),
                     textAlign: TextAlign.justify,
                   ),
+
                   const SizedBox(height: 24),
                 ],
               ),

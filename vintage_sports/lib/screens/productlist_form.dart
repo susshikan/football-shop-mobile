@@ -159,7 +159,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   decoration: InputDecoration(
-                    hintText: 'URL Thumbnail (wajib)',
+                    hintText: 'URL Thumbnail ',
                     labelText: 'URL Thumbnail',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5.0),
@@ -171,10 +171,8 @@ class _NewsFormPageState extends State<NewsFormPage> {
                     });
                   },
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'URL thumbnail tidak boleh kosong!';
-                    }
-                    if (!_isValidUrl(value)) {
+                  
+                    if (!_isValidUrl(value!)) {
                       return 'URL tidak valid (gunakan http/https)';
                     }
                     return null;
@@ -305,7 +303,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
                       if (_formKey.currentState!.validate()) {
                         // Ganti URL dengan URL backend Django kamu
                         final response = await request.postJson(
-                          "http://10.0.2.2:8000/create-product-flutter/",
+                          "http://localhost:8000/create-product-flutter/",
                           jsonEncode({
                             "name": _name,
                             "price": _price,
@@ -321,7 +319,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
 
                         if (context.mounted) {
                           if (response['status'] == 'success') {
-                            // Jika sukses → tampilkan dialog konfirmasi
+                           
                             showDialog(
                               context: context,
                               builder: (context) {

@@ -13,7 +13,7 @@ class ProductEntry {
     String name;
     int price;
     String description;
-    String thumbnail;
+    String? thumbnail;
     String category;
     String historyValue;
     bool isFeatured;
