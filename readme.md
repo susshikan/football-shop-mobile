@@ -144,4 +144,42 @@ Contoh dari aplikasi:
 </details>
 
 
+<details>
+    <summary><h2>Tugas Individu 9</h2></summary>
 
+  ## Jelaskan mengapa kita perlu membuat model Dart saat mengambil/mengirim data JSON? Apa konsekuensinya jika langsung memetakan Map<String, dynamic> tanpa model (terkait validasi tipe, null-safety, maintainability)?
+  Kita perlu membuat model Dart agar data JSON memiliki struktur dan tipe yang jelas, sehingga aplikasi lebih aman (null-safety), terhindar dari error tipe, dan lebih mudah dirawat; sedangkan langsung memakai Map<String, dynamic> membuat kode rawan bug, sulit divalidasi, dan tidak maintainable.
+
+  ## Apa fungsi package http dan CookieRequest dalam tugas ini? Jelaskan perbedaan peran http vs CookieRequest.
+
+  ## Jelaskan mengapa instance CookieRequest perlu untuk dibagikan ke semua komponen di aplikasi Flutter.
+  - Peran: Kelola sesi Django (cookie sessionid), simpan & kirim cookie otomatis, handle CSRF, metode login, logout, post, get.
+  - http digunakan untuk melakukan request HTTP biasa tanpa manajemen sesi, sedangkan CookieRequest secara otomatis menangani cookie, autentikasi, dan sesi sehingga cocok untuk komunikasi dengan backend Django yang memakai login berbasis session.
+  ## Jelaskan konfigurasi konektivitas yang diperlukan agar Flutter dapat berkomunikasi dengan Django. Mengapa kita perlu menambahkan 10.0.2.2 pada ALLOWED_HOSTS, mengaktifkan CORS dan pengaturan SameSite/cookie, dan menambahkan izin akses internet di Android? Apa yang akan terjadi jika konfigurasi tersebut tidak dilakukan dengan benar?
+  - ALLOWED_HOSTS tambah ['10.0.2.2', 'localhost']
+  - CORS (terutama untuk Flutter Web)
+    ```
+     django-cors-headers, set CORS_ALLOW_CREDENTIALS = True, CORS_ALLOWED_ORIGINS atau CORS_ALLOWED_ORIGIN_REGEXES.
+    ```
+  - CSRF & cookie
+    ```
+    Set CSRF_TRUSTED_ORIGINS, atur SESSION_COOKIE_SAMESITE/CSRF_COOKIE_SAMESITE sesuai kebutuhan. Untuk mobile native tidak ada CORS, tapi CSRF tetap berlaku untuk POST.
+    ```
+  - Izin Internet Android
+    ```
+     <uses-permission android:name="android.permission.INTERNET" />
+    ```
+  ## Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.
+  Proses pengiriman data dari input hingga tampil di Flutter dimulai ketika pengguna mengisi form dan menekan tombol submit; Flutter kemudian mengumpulkan nilai dari setiap field dan mengirimkannya ke backend melalui request HTTP (misalnya menggunakan CookieRequest atau http) dalam format JSON. Backend Django menerima request tersebut, memproses data—misalnya memvalidasi input, membuat objek model baru, dan menyimpannya ke database—lalu mengembalikan respons JSON yang berisi status atau data yang sudah tersimpan. Flutter kemudian menerima respons ini, melakukan parsing JSON menjadi model Dart, memperbarui state aplikasi, dan akhirnya menampilkan data tersebut pada UI seperti di halaman detail atau list view.
+
+  ## Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.
+  Mekanisme autentikasi berjalan ketika Flutter mengirim data login/registrasi ke Django, Django memverifikasi lalu membuat atau mengaktifkan sesi dengan menyimpan cookie yang kemudian digunakan Flutter (via CookieRequest) untuk setiap request berikutnya sehingga pengguna dianggap sudah masuk sampai akhirnya melakukan logout yang menghapus sesi tersebut dan mengembalikan UI ke menu awal.
+
+  ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step! (bukan hanya sekadar mengikuti tutorial).
+  1. Membuat Fitur Registrasi & Login di Django
+  2. Buat Model Kustom di Flutter
+  3. Menambahkan Dependensi HTTP / CookieRequest di Flutter
+  4. integrasi Data dari Django ke Flutter (Fetch & Kirim)
+  5. Menampilkan List & Detail Item di Flutter
+  6. Mengimplementasikan Logout
+</details>
