@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vintage_sports/widgets/left_drawer.dart';
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:vintage_sports/screens/menu.dart';
 
 class NewsFormPage extends StatefulWidget {
   const NewsFormPage({super.key});
@@ -50,6 +54,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
 
   @override
   Widget build(BuildContext context) {
+     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -296,54 +301,83 @@ class _NewsFormPageState extends State<NewsFormPage> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.indigo),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Produk berhasil tersimpan'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Nama: $_name'),
-                                    Text('Harga: ${_price ?? ''}') ,
-                                    Text('Deskripsi: $_description'),
-                                    Text('Thumbnail: $_thumbnail'),
-                                    Text('Kategori: $_category'),
-                                    Text('Unggulan: ${_isFeatured ? 'Ya' : 'Tidak'}'),
-                                    Text('Musim: $_season'),
-                                    Text('Eksklusif: ${_exlusive ? 'Ya' : 'Tidak'}'),
-                                    Text('Nilai Historis: $_historyValue'),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    _formKey.currentState!.reset();
-                                    setState(() {
-                                      _name = '';
-                                      _price = null;
-                                      _description = '';
-                                      _thumbnail = '';
-                                      _category = 'match_worn_vintage';
-                                      _isFeatured = false;
-                                      _season = '';
-                                      _exlusive = false;
-                                      _historyValue = 'classic';
-                                    });
-                                  },
-                                ),
-                              ],
-                            );
-                          },
+                        // Ganti URL dengan URL backend Django kamu
+                        final response = await request.postJson(
+                          "http://10.0.2.2:8000/create-product-flutter/",
+                          jsonEncode({
+                            "name": _name,
+                            "price": _price,
+                            "description": _description,
+                            "thumbnail": _thumbnail,
+                            "category": _category,
+                            "is_featured": _isFeatured,
+                            "season": _season,
+                            "exlusive": _exlusive,
+                            "history_value": _historyValue,
+                          }),
                         );
+
+                        if (context.mounted) {
+                          if (response['status'] == 'success') {
+                            // Jika sukses → tampilkan dialog konfirmasi
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Produk berhasil tersimpan'),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Nama: $_name'),
+                                        Text('Harga: ${_price ?? ''}'),
+                                        Text('Deskripsi: $_description'),
+                                        Text('Thumbnail: $_thumbnail'),
+                                        Text('Kategori: $_category'),
+                                        Text('Unggulan: ${_isFeatured ? 'Ya' : 'Tidak'}'),
+                                        Text('Musim: $_season'),
+                                        Text('Eksklusif: ${_exlusive ? 'Ya' : 'Tidak'}'),
+                                        Text('Nilai Historis: $_historyValue'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        _formKey.currentState!.reset();
+
+                                        setState(() {
+                                          _name = '';
+                                          _price = null;
+                                          _description = '';
+                                          _thumbnail = '';
+                                          _category = 'match_worn_vintage';
+                                          _isFeatured = false;
+                                          _season = '';
+                                          _exlusive = false;
+                                          _historyValue = 'classic';
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Terjadi kesalahan, coba lagi."),
+                              ),
+                            );
+                          }
+                        }
                       }
                     },
+
                     child: const Text(
                       'Save',
                       style: TextStyle(color: Colors.white),
