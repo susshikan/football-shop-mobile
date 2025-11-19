@@ -39,7 +39,7 @@ class _NewsEntryListPageState extends State<ProductEntryListPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('News Entry List'),
+        title: const Text('Daftar Produk Vintage'),
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
@@ -49,14 +49,33 @@ class _NewsEntryListPageState extends State<ProductEntryListPage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (!snapshot.hasData) {
-              return const Column(
-                children: [
-                  Text(
-                    'There are no news in football news yet.',
-                    style: TextStyle(fontSize: 20, color: Color(0xff59A5D8)),
-                  ),
-                  SizedBox(height: 8),
-                ],
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.sports_soccer_outlined,
+                      size: 40,
+                      color: Colors.black.withOpacity(0.35),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Belum ada produk',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Mulai tambahkan koleksi vintage Anda.',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
               );
             } else {
               return ListView.builder(

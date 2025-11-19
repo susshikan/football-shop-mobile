@@ -21,7 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: const Text('Vintage Sports'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

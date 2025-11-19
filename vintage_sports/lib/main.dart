@@ -14,6 +14,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final baseColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF800020), // burgundy
+      brightness: Brightness.light,
+    );
+
     return Provider(
       create: (_) {
         CookieRequest request = CookieRequest();
@@ -22,24 +27,39 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Vintage Sports',
         theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a purple toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSwatch(
-            primarySwatch: Colors.blue,
-          ).copyWith(secondary: Colors.blueAccent[400]),
+          useMaterial3: true,
+          colorScheme: baseColorScheme.copyWith(
+            primary: const Color(0xFF800020), // burgundy
+            secondary: const Color(0xFFB8860B), // gold
+            background: const Color(0xFFF8F8F8),
+            surface: Colors.white,
+          ),
+          scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+          fontFamily: 'Inter',
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            foregroundColor: Color(0xFF1A1A1A),
+            elevation: 0.5,
+            centerTitle: false,
+          ),
+          cardTheme: CardThemeData(
+            color: Colors.white,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Colors.black12.withOpacity(0.06)),
+            ),
+          ),
+          textTheme: ThemeData.light().textTheme.apply(
+                bodyColor: const Color(0xFF1A1A1A),
+                displayColor: const Color(0xFF1A1A1A),
+              ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              shape: const StadiumBorder(),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            ),
+          ),
         ),
         home: const LoginPage(),
       ),

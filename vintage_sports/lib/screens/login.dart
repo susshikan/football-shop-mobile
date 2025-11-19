@@ -13,12 +13,27 @@ class LoginApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseColorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF800020),
+      brightness: Brightness.light,
+    );
+
     return MaterialApp(
       title: 'Login',
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
-          .copyWith(secondary: Colors.blueAccent[400]),
+        colorScheme: baseColorScheme.copyWith(
+          primary: const Color(0xFF800020),
+          secondary: const Color(0xFFB8860B),
+          background: const Color(0xFFF8F8F8),
+          surface: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color(0xFFF8F8F8),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Color(0xFF1A1A1A),
+          elevation: 0.5,
+        ),
       ),
       home: const LoginPage(),
     );
@@ -42,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
         appBar: AppBar(
-            title: const Text('Login'),
+            title: const Text('Vintage Sports'),
         ),
         body: Center(
             child: SingleChildScrollView(

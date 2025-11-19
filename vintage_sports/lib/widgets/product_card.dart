@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:vintage_sports/screens/product_entry_list.dart';
 import 'package:vintage_sports/screens/productlist_form.dart';
-import 'package:vintage_sports/widgets/left_drawer.dart';
-import 'package:vintage_sports/screens/login.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
 
 final List<ItemHomepage> items = [
-    ItemHomepage("All Products", Icons.list_alt, Colors.blue),
-    ItemHomepage("My Products", Icons.shopping_cart, Colors.green),
-    ItemHomepage("Create Product", Icons.add_box, Colors.red),
-  ];
+  ItemHomepage("All Products", Icons.grid_view_rounded, Colors.transparent),
+  ItemHomepage("My Products", Icons.favorite_border_rounded, Colors.transparent),
+  ItemHomepage("Create Product", Icons.add_circle_outline_rounded, Colors.transparent),
+];
 class InfoCard extends StatelessWidget {
   // Kartu informasi yang menampilkan title dan content.
 
@@ -61,83 +57,73 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-    return Material(
-      // Menentukan warna latar belakang dari tema aplikasi.
-      color: item.color,
-      // Membuat sudut kartu melengkung.
-      borderRadius: BorderRadius.circular(12),
+    final colorScheme = Theme.of(context).colorScheme;
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
+          );
 
-      child: InkWell(
-        // Aksi ketika kartu ditekan.
-        onTap: () async {
-          // Menampilkan pesan SnackBar saat kartu ditekan.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
-
-            if (item.name == "Create Product") {
-          
-            Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const NewsFormPage()));
-            }else if (item.name == "See Football News") {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ProductEntryListPage()
-                  ),
-              );
-            }else if (item.name == "Logout") {
-            // TODO: Replace the URL with your app's URL and don't forget to add a trailing slash (/)!
-            // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
-            // If you using chrome,  use URL http://localhost:8000
-            
-              final response = await request.logout(
-                  "http://locahost:8000/auth/logout/");
-              String message = response["message"];
-              if (context.mounted) {
-                  if (response['status']) {
-                      String uname = response["username"];
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("$message See you again, $uname."),
-                      ));
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
-                      );
-                  } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text(message),
-                          ),
-                      );
-                  }
-              }
-        }
-        },
-        // Container untuk menyimpan Icon dan Text
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              // Menyusun ikon dan teks di tengah kartu.
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
+        if (item.name == "Create Product") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const NewsFormPage()),
+          );
+        } else if (item.name == "All Products" || item.name == "My Products") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ProductEntryListPage(),
             ),
+          );
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: Colors.black12.withOpacity(0.06),
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x14000000),
+              offset: Offset(0, 8),
+              blurRadius: 20,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withOpacity(0.06),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  item.icon,
+                  color: colorScheme.primary,
+                  size: 24.0,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                item.name,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                ),
+              ),
+            ],
           ),
         ),
       ),

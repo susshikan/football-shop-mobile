@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vintage_sports/screens/productlist_form.dart';
 import 'package:vintage_sports/widgets/left_drawer.dart';
 import 'package:vintage_sports/widgets/product_card.dart';
+import 'package:vintage_sports/screens/product_entry_list.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -11,78 +12,118 @@ class MyHomePage extends StatelessWidget {
   final String kelas = "B"; //kelas
 
   @override
-    Widget build(BuildContext context) {
-    // Scaffold menyediakan struktur dasar halaman dengan AppBar dan body.
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      // AppBar adalah bagian atas halaman yang menampilkan judul.
       appBar: AppBar(
-        // Judul aplikasi "Football News" dengan teks putih dan tebal.
         title: const Text(
           'Vintage Sports',
           style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        // Warna latar belakang AppBar diambil dari skema warna tema aplikasi.
-        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       drawer: LeftDrawer(),
-      // Body halaman dengan padding di sekelilingnya.
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        // Menyusun widget secara vertikal dalam sebuah kolom.
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Row untuk menampilkan 3 InfoCard secara horizontal.
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Name', content: nama),
-                InfoCard(title: 'Class', content: kelas),
-              ],
-            ),
-
-            // Memberikan jarak vertikal 16 unit.
-            const SizedBox(height: 16.0),
-
-            // Menempatkan widget berikutnya di tengah halaman.
-            Center(
-              child: Column(
-                // Menyusun teks dan grid item secara vertikal.
-
-                children: [
-                  // Menampilkan teks sambutan dengan gaya tebal dan ukuran 18.
-                  const Padding(
-                    padding: EdgeInsets.only(top: 16.0),
-                    child: Text(
-                      'Selamat datang di Vintage Sports',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
-                  ),
-
-                  // Grid untuk menampilkan ItemCard dalam bentuk grid 3 kolom.
-                  GridView.count(
-                    primary: true,
-                    padding: const EdgeInsets.all(20),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    // Agar grid menyesuaikan tinggi kontennya.
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    // Menampilkan ItemCard untuk setiap item dalam list items.
-                    children: items.map((ItemHomepage item) {
-                      return ItemCard(item);
-                    }).toList(),
+            Container(
+              decoration: BoxDecoration(
+                color: colorScheme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: Colors.black12.withOpacity(0.06),
+                ),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x14000000),
+                    offset: Offset(0, 10),
+                    blurRadius: 30,
                   ),
                 ],
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Temukan Heritage\nSepakbola Disini',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Hi, $nama · $npm · Kelas $kelas',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductEntryListPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('Semua Produk'),
+                      ),
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductEntryListPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('Produk Saya'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NewsFormPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('+ Tambah Produk'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16.0),
+
+            Text(
+              'Aksi Cepat',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+            const SizedBox(height: 8),
+            GridView.count(
+              padding: const EdgeInsets.only(top: 4),
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              children: items.map((ItemHomepage item) {
+                return ItemCard(item);
+              }).toList(),
             ),
           ],
         ),

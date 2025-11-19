@@ -57,11 +57,7 @@ class _NewsFormPageState extends State<NewsFormPage> {
      final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Center(
-          child: Text('Form Tambah Produk'),
-        ),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
+        title: const Text('Form Tambah Produk'),
       ),
       drawer: LeftDrawer(),
       body: Form(
@@ -296,8 +292,13 @@ class _NewsFormPageState extends State<NewsFormPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size.fromHeight(48),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(999),
+                      ),
                     ),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
